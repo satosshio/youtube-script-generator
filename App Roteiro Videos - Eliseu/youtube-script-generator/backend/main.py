@@ -14,7 +14,12 @@ app = FastAPI(title="YouTube Script Generator API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:3000", 
+        "http://localhost:5173",
+        "https://aa3be56c.youtube-script-generator.pages.dev",
+        "https://experatoflix.com.br"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
