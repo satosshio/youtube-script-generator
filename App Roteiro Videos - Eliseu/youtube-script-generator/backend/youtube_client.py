@@ -11,14 +11,20 @@ class YouTubeClient:
     def __init__(self):
         self.api_key = os.getenv("YOUTUBE_API_KEY")
         if not self.api_key:
-            raise ValueError("YouTube API key not found. Please set YOUTUBE_API_KEY in .env file")
-        self.youtube = build('youtube', 'v3', developerKey=self.api_key)
+            print("Warning: YouTube API key not found. YouTube functionality will be limited.")
+            self.youtube = None
+        else:
+            self.youtube = build('youtube', 'v3', developerKey=self.api_key)
         self.transcript_extractor = TranscriptExtractor()
     
     def search_trending_videos(self, query: str, max_results: int = 10) -> List[Dict]:
         """
         Busca vídeos em alta sobre um assunto específico usando múltiplos critérios
         """
+        if not self.youtube:
+            print("YouTube API not available - returning empty results")
+            return []
+        
         try:
             # Busca por relevância primeiro (algoritmo do YouTube considera engagement)
             search_response = self.youtube.search().list(
@@ -97,6 +103,10 @@ class YouTubeClient:
             published_before: Data no formato 'YYYY-MM-DD' ou 'YYYY-MM-DDTHH:MM:SSZ'
             max_results: Número máximo de resultados
         """
+        if not self.youtube:
+            print("YouTube API not available - returning empty results")
+            return []
+        
         try:
             search_params = {
                 'q': query,

@@ -22,11 +22,16 @@ class ScriptState(TypedDict):
 
 class MultiAgentSystem:
     def __init__(self):
-        self.llm = ChatOpenAI(
-            model="gpt-4o-mini",
-            temperature=0.7,
-            api_key=os.getenv("OPENAI_API_KEY")
-        )
+        openai_api_key = os.getenv("OPENAI_API_KEY")
+        if not openai_api_key:
+            print("Warning: OpenAI API key not found. AI functionality will be limited.")
+            self.llm = None
+        else:
+            self.llm = ChatOpenAI(
+                model="gpt-4o-mini",
+                temperature=0.7,
+                api_key=openai_api_key
+            )
         self.graph = self._build_graph()
         self.progress_callback = None
         self.agent_info = {
@@ -611,6 +616,9 @@ class MultiAgentSystem:
         return '\n'.join(formatted)
     
     async def generate_script(self, videos: List[Dict], topic: str, target_minutes: int = 10, personality_prompt: str = None) -> str:
+        if not self.llm:
+            return "Error: OpenAI API não está disponível. Por favor configure OPENAI_API_KEY."
+        
         initial_state = ScriptState(
             videos=videos,
             topic=topic,
