@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { supabase } from './supabaseClient'
 
-const API_URL = 'http://localhost:8000'
+const API_URL = import.meta.env.VITE_API_URL || 'https://youtube-script-generator-mnkq.onrender.com'
 
 // Create axios instance
 const api = axios.create({
