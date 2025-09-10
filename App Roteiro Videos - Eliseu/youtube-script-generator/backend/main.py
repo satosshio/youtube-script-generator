@@ -93,9 +93,14 @@ async def generate_script(request: ScriptGenerationRequest, current_user: dict =
     Gera um roteiro baseado nos vídeos encontrados usando o sistema multiagente
     """
     try:
+        print(f"DEBUG: Iniciando geração de roteiro para user: {current_user.get('email', 'unknown')}")
+        print(f"DEBUG: Número de vídeos recebidos: {len(request.videos) if request.videos else 0}")
+        
         if not request.videos:
+            print("DEBUG: Erro - nenhum vídeo fornecido")
             raise HTTPException(status_code=400, detail="É necessário fornecer vídeos para gerar o roteiro")
         
+        print("DEBUG: Chamando agent_system.generate_script...")
         script = await agent_system.generate_script(
             videos=request.videos,
             topic=request.topic,
@@ -103,8 +108,13 @@ async def generate_script(request: ScriptGenerationRequest, current_user: dict =
             personality_prompt=request.personality_prompt
         )
         
+        print("DEBUG: Script gerado com sucesso")
         return ScriptResponse(script=script, topic=request.topic)
+    except HTTPException as he:
+        print(f"DEBUG: HTTPException capturada: {he.status_code} - {he.detail}")
+        raise
     except Exception as e:
+        print(f"DEBUG: Exceção geral capturada: {type(e).__name__}: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Erro ao gerar roteiro: {str(e)}")
 
 @app.post("/api/generate-script-with-progress")
