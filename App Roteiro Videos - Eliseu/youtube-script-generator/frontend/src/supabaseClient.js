@@ -41,3 +41,6 @@ const testSupabaseConnection = async () => {
 
 // Run test after a small delay
 setTimeout(testSupabaseConnection, 1000)
+
+// Force bundle change - BUILD v2
+console.log('Bundle version: v2.0 - Fixed API key issue')
