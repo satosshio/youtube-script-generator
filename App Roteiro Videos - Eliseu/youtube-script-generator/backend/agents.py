@@ -367,13 +367,29 @@ class MultiAgentSystem:
         ⚠️ IMPORTANTE: O roteiro atual pode estar muito CURTO. 
         Você DEVE expandir o conteúdo para atingir pelo menos {min_words} palavras FALADAS.
         
-        📋 FORMATO OBRIGATÓRIO DE SAÍDA:
+        📋 FORMATO OBRIGATÓRIO DE SAÍDA - SIGA EXATAMENTE:
         
-        [SEÇÃO - tempo estimado]
-        Eliseu 👤: [Fala do Eliseu aqui...]
+        🚨 EXEMPLO DO FORMATO CORRETO:
         
-        [INDICAÇÃO TÉCNICA - ação ou visual]
-        Eliseu 👤: [Continuação da fala...]
+        [GANCHO - 10 segundos]
+        Eliseu 👤: Fala, galera! Você sabia que...
+        
+        [INTRODUÇÃO - por que é importante]
+        Eliseu 👤: Isso mesmo, é impressionante! Mas e se eu te disser...
+        
+        [DESENVOLVIMENTO - ponto principal]
+        Eliseu 👤: Primeiro, vamos entender que...
+        
+        [INDICAÇÃO VISUAL - mostrar dados na tela]
+        Eliseu 👤: Como vocês podem ver neste gráfico...
+        
+        🚨 REGRAS RÍGIDAS:
+        ❌ NÃO escreva texto corrido sem formatação
+        ❌ NÃO omita "Eliseu 👤:" antes de cada fala
+        ❌ NÃO omita as seções [ENTRE COLCHETES]
+        ✅ SEMPRE quebre em blocos organizados
+        ✅ SEMPRE use "Eliseu 👤:" para cada fala
+        ✅ SEMPRE marque seções com [NOME DA SEÇÃO]
         """
         
         if not personality_prompt:
@@ -420,14 +436,24 @@ class MultiAgentSystem:
         - DESENVOLVA cada ponto completamente - NÃO seja superficial
         - Adicione exemplos, contexto e detalhes para atingir a duração alvo
         
+        🚨 INSTRUÇÕES FINAIS OBRIGATÓRIAS:
+        
+        1. REESCREVA TODO O ROTEIRO no formato especificado acima
+        2. QUEBRE o texto em seções organizadas com [TÍTULOS]
+        3. TODA fala DEVE começar com "Eliseu 👤:"
+        4. ADICIONE indicações técnicas [entre colchetes] quando necessário
+        5. MANTENHA o conteúdo original mas organize no formato correto
+        
         🚨 PROIBIÇÕES ABSOLUTAS:
-        ❌ NÃO escreva explicações sobre o roteiro ("Este roteiro agora possui...", "A estrutura melhorada...")
-        ❌ NÃO faça comentários meta sobre o conteúdo 
-        ❌ NÃO inclua resumos técnicos da estrutura
-        ❌ NÃO adicione comentários finais ("Esse roteiro agora tem...", "Espero que atenda...")
-        ❌ NÃO use formatação markdown (**negrito**, *itálico*, # títulos)
-        ✅ TERMINE com a última fala do Eliseu, SEM comentários adicionais
-        ✅ APENAS reescreva no formato: "Eliseu 👤: [fala]" com [indicações técnicas]
+        ❌ PROIBIDO texto corrido sem "Eliseu 👤:"
+        ❌ PROIBIDO omitir seções [ENTRE COLCHETES]
+        ❌ PROIBIDO explicações sobre o roteiro
+        ❌ PROIBIDO comentários finais ou resumos
+        ❌ PROIBIDO formatação markdown
+        
+        ✅ COMECE imediatamente com: [GANCHO - 10 segundos]
+        ✅ TERMINE com a última fala: "Eliseu 👤: [última fala]"
+        ✅ SEM comentários adicionais após a última fala
         """
         
         response = self.llm.invoke([HumanMessage(content=prompt)])
@@ -528,27 +554,38 @@ class MultiAgentSystem:
         
         📈 Palavras faladas: {word_count}
         
-        🎬 FORMATO DE ROTEIRO PROFISSIONAL:
+        🎬 FORMATO OBRIGATÓRIO - ROTEIRO PROFISSIONAL:
+        
+        🚨 ATENÇÃO: Você DEVE seguir este formato EXATAMENTE:
         
         [GANCHO - 10 segundos]
-        Eliseu 👤: [Sua fala aqui...]
+        Eliseu 👤: Fala, pessoal! Hoje eu vou mostrar pra vocês...
         
-        [INTRODUÇÃO]
-        Eliseu 👤: [Sua fala aqui...]
+        [INTRODUÇÃO - transição suave]
+        Eliseu 👤: E por que isso é tão importante? Olha só...
         
-        [INDICAÇÃO VISUAL - mostrar algo]
-        Eliseu 👤: [Continuação da fala...]
+        [DESENVOLVIMENTO - ponto 1]
+        Eliseu 👤: Primeiro, vamos entender que...
         
-        REGRAS CRÍTICAS:
-        ❌ NÃO inclua explicações sobre o roteiro
-        ❌ NÃO escreva coisas como "Este roteiro possui...", "A estrutura inclui...", etc
-        ❌ NÃO adicione comentários finais ("Esse roteiro agora tem...", "Espero que atenda...")
-        ❌ NÃO use formatação markdown (**negrito**, *itálico*, # títulos)
-        ❌ NÃO faça resumos ou explicações sobre o resultado
-        ✅ APENAS falas do Eliseu marcadas com "Eliseu 👤:"
-        ✅ Indicações técnicas sempre [entre colchetes]
-        ✅ TERMINE com a última fala do Eliseu, SEM comentários adicionais
-        ✅ Formato limpo de estúdio profissional
+        [INDICAÇÃO VISUAL - mostrar gráfico na tela]
+        Eliseu 👤: Como vocês podem ver neste exemplo...
+        
+        [CONCLUSÃO - call to action]
+        Eliseu 👤: Então, deixa nos comentários o que vocês acharam...
+        
+        🚨 REGRAS CRÍTICAS - FORMATO OBRIGATÓRIO:
+        ❌ PROIBIDO texto corrido sem formatação
+        ❌ PROIBIDO parágrafos longos sem quebras
+        ❌ PROIBIDO omitir as marcações [SEÇÃO]
+        ❌ PROIBIDO omitir "Eliseu 👤:" antes de TODA fala
+        ❌ PROIBIDO explicações sobre o roteiro
+        ❌ PROIBIDO comentários finais ou resumos
+        
+        ✅ OBRIGATÓRIO: Toda fala DEVE começar com "Eliseu 👤:"
+        ✅ OBRIGATÓRIO: Toda seção DEVE ter [TÍTULO DA SEÇÃO]
+        ✅ OBRIGATÓRIO: Indicações técnicas sempre [entre colchetes]
+        ✅ OBRIGATÓRIO: Quebrar o texto em blocos organizados
+        ✅ OBRIGATÓRIO: Terminar com última fala do Eliseu
         
         🎯 LEMBRE-SE: Se o roteiro atual tem menos de {min_words} palavras, você DEVE expandi-lo completamente. NÃO aceite roteiros curtos!
         """
@@ -570,22 +607,39 @@ class MultiAgentSystem:
             Pegue o roteiro abaixo e TRIPLIQUE o conteúdo:
             {response.content}
             
+            🚨 FORMATO OBRIGATÓRIO - SIGA RIGOROSAMENTE:
+            
+            [GANCHO - 10 segundos]
+            Eliseu 👤: [Fala de abertura aqui...]
+            
+            [INTRODUÇÃO - contexto]
+            Eliseu 👤: [Explicação do contexto...]
+            
+            [DESENVOLVIMENTO - pontos principais]
+            Eliseu 👤: [Primeiro ponto expandido...]
+            
+            [INDICAÇÃO VISUAL - mostrar dados]
+            Eliseu 👤: [Comentário sobre o visual...]
+            
+            [CONCLUSÃO - call to action]
+            Eliseu 👤: [Finalização e CTA...]
+            
             ESTRATÉGIAS OBRIGATÓRIAS:
             - Para CADA ponto, adicione 3-5 frases de explicação
             - Para CADA exemplo, adicione histórias e contexto
             - Adicione sub-tópicos em CADA seção
             - Desenvolva MUITO mais a introdução e conclusão
-            - Adicione transições longas entre todas as seções
-            - Inclua dados, estatísticas e comparações em CADA ponto
-            - Antecipe dúvidas do espectador em CADA tópico
+            - Use o formato [SEÇÃO] e "Eliseu 👤:" OBRIGATORIAMENTE
             
-            🚫 PROIBIDO ABSOLUTAMENTE:
-            ❌ NÃO adicione comentários finais ("Esse roteiro agora tem...", "Espero que atenda...")
-            ❌ NÃO use formatação markdown (**negrito**, *itálico*, # títulos)
-            ❌ NÃO faça resumos ou explicações sobre o resultado
-            ✅ TERMINE com a última fala do Eliseu, SEM comentários adicionais
+            🚫 REGRAS CRÍTICAS:
+            ❌ PROIBIDO texto corrido sem formatação
+            ❌ PROIBIDO omitir "Eliseu 👤:" antes de falas
+            ❌ PROIBIDO omitir seções [ENTRE COLCHETES]
+            ❌ PROIBIDO comentários finais sobre o roteiro
             
-            RETORNE APENAS O ROTEIRO PURO COM PELO MENOS {min_words} PALAVRAS FALADAS!
+            ✅ USE o formato especificado acima OBRIGATORIAMENTE
+            ✅ TERMINE com última fala do Eliseu
+            ✅ PELO MENOS {min_words} PALAVRAS FALADAS!
             """
             
             retry_response = self.llm.invoke([HumanMessage(content=retry_prompt)])
