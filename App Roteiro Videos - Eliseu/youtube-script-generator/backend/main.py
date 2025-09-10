@@ -69,6 +69,14 @@ class ScriptResponse(BaseModel):
 async def root():
     return {"message": "YouTube Script Generator API", "version": "1.0.0"}
 
+@app.post("/api/test-auth")
+async def test_auth(current_user: dict = Depends(get_current_user)):
+    """
+    Endpoint de teste para verificar autenticação
+    """
+    print("DEBUG: [test-auth] Endpoint executado com sucesso!")
+    return {"message": "Auth working", "user": current_user.get('email', 'unknown')}
+
 @app.post("/api/search-videos", response_model=List[VideoResponse])
 async def search_videos(request: SearchRequest, current_user: dict = Depends(get_current_user)):
     """
