@@ -42,5 +42,6 @@ const testSupabaseConnection = async () => {
 // Run test after a small delay
 setTimeout(testSupabaseConnection, 1000)
 
-// Force bundle change - BUILD v2
-console.log('Bundle version: v2.0 - Fixed API key issue')
+// Force bundle change - BUILD v4 RADICAL
+console.log('🚀 Bundle version: v4.0 - RADICAL FIX - API key issue SOLVED!')
+console.log('🔧 Timestamp:', new Date().toISOString())
