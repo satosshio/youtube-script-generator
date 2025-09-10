@@ -31,24 +31,32 @@ async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(secur
     """
     try:
         token = credentials.credentials
+        print(f"DEBUG: Token recebido: {token[:50]}...")
         
         # Verify the JWT token with Supabase
         response = supabase.auth.get_user(token)
+        print(f"DEBUG: Resposta Supabase: user={response.user is not None}")
         
         if not response.user:
+            print("DEBUG: Usuário não encontrado na resposta")
             raise HTTPException(
                 status_code=401,
                 detail="Invalid authentication credentials",
                 headers={"WWW-Authenticate": "Bearer"},
             )
         
+        print(f"DEBUG: Usuário autenticado: {response.user.email}")
         return {
             "user_id": response.user.id,
             "email": response.user.email,
             "user": response.user
         }
         
+    except HTTPException:
+        print("DEBUG: HTTPException capturada, repassando")
+        raise
     except Exception as e:
+        print(f"DEBUG: Erro na verificação do token: {str(e)}")
         raise HTTPException(
             status_code=401,
             detail="Could not validate credentials",
