@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, Loader2, Video, Eye, ThumbsUp, FileText, Sparkles, Calendar, Clock, Filter, Timer, User, Play, TrendingUp, Zap, Settings } from 'lucide-react';
+import { Search, Loader2, Video, Eye, ThumbsUp, FileText, Calendar, Clock, Filter, Timer, User, Play, TrendingUp, Zap, Settings } from 'lucide-react';
 import { AuthProvider, useAuth } from './AuthContext';
 import Auth from './components/Auth';
 import Header from './components/Header';
@@ -277,24 +277,17 @@ function AppContent() {
         <div className="relative z-10">
 
         <div className="container mx-auto px-6 py-12 max-w-7xl">
-          {/* Hero Section - Landing Page Style */}
-          <div className="text-center mb-12 animate-fade-in">
-            {/* Main Headline */}
-            <h1 className="mb-4 leading-tight">
-              <div className="text-3xl md:text-5xl font-bold text-gray-300 mb-2">
-                IA que transforma vídeos virais
-              </div>
-              <div className="text-5xl md:text-7xl font-black">
-                em <span className="bg-gradient-to-r from-primary-400 via-primary-500 to-accent-500 bg-clip-text text-transparent">roteiros únicos</span>
-              </div>
+          {/* Simplified Header */}
+          <div className="text-center mb-8 animate-fade-in">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-200 mb-2">
+              Gerador de Roteiros com IA
             </h1>
-            
-            {/* Subtitle */}
-            <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto font-light">
-              Descubra vídeos em alta e transforme-os em roteiros prontos em segundos
+            <p className="text-gray-400 mb-6">
+              Pesquise um tópico e gere roteiros baseados em vídeos em alta
             </p>
+          </div>
 
-            {/* Main Search Bar - Hero */}
+            {/* Main Search Bar */}
             <div className="max-w-2xl mx-auto mb-8">
               <div className="relative">
                 <input

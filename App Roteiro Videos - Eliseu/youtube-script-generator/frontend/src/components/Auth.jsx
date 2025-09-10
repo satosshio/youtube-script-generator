@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useAuth } from '../AuthContext'
-import { Mail, Lock, User, Eye, EyeOff, Loader2 } from 'lucide-react'
+import { Mail, Lock, User, Eye, EyeOff, Loader2, Sparkles, Video, FileText } from 'lucide-react'
 
 const Auth = () => {
   const [email, setEmail] = useState('')
@@ -80,8 +80,69 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950 flex">
+      {/* Left side - Promotional Content */}
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-12 relative">
+        {/* Background effects */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-900/20 via-transparent to-accent-900/20"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary-900/10 via-transparent to-transparent"></div>
+        
+        <div className="relative z-10 max-w-lg animate-fade-in">
+          {/* Icons decoration */}
+          <div className="flex gap-3 mb-8">
+            <div className="p-3 rounded-xl bg-primary-500/10 border border-primary-500/20">
+              <Video className="w-6 h-6 text-primary-400" />
+            </div>
+            <div className="p-3 rounded-xl bg-accent-500/10 border border-accent-500/20">
+              <Sparkles className="w-6 h-6 text-accent-400" />
+            </div>
+            <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20">
+              <FileText className="w-6 h-6 text-purple-400" />
+            </div>
+          </div>
+          
+          {/* Main Headline */}
+          <h1 className="mb-6 leading-tight">
+            <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-300 mb-3">
+              IA que transforma vídeos virais
+            </div>
+            <div className="text-4xl md:text-5xl lg:text-6xl font-black">
+              em <span className="bg-gradient-to-r from-primary-400 via-primary-500 to-accent-500 bg-clip-text text-transparent">roteiros únicos</span>
+            </div>
+          </h1>
+          
+          {/* Subtitle */}
+          <p className="text-xl text-gray-400 mb-8 font-light">
+            Descubra vídeos em alta e transforme-os em roteiros prontos em segundos
+          </p>
+          
+          {/* Features list */}
+          <div className="space-y-4">
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 rounded-full bg-primary-500/20 border border-primary-500/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div className="w-2 h-2 bg-primary-400 rounded-full"></div>
+              </div>
+              <p className="text-gray-300">Análise automática de vídeos em tendência</p>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 rounded-full bg-primary-500/20 border border-primary-500/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div className="w-2 h-2 bg-primary-400 rounded-full"></div>
+              </div>
+              <p className="text-gray-300">Geração inteligente com múltiplos modelos de IA</p>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 rounded-full bg-primary-500/20 border border-primary-500/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div className="w-2 h-2 bg-primary-400 rounded-full"></div>
+              </div>
+              <p className="text-gray-300">Personalização completa de estilo e duração</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Right side - Login Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="mx-auto w-16 h-16 rounded-2xl overflow-hidden ring-2 ring-primary-500/30 mb-4">
@@ -189,6 +250,7 @@ const Auth = () => {
           </form>
 
         </div>
+      </div>
       </div>
     </div>
   )
