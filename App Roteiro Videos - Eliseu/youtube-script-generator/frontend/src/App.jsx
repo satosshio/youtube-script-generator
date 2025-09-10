@@ -90,54 +90,40 @@ function AppContent() {
   const countSpokenWords = (text) => {
     if (!text) return 0;
     
-    // Remove everything before the actual script starts
+    // Simple approach: count all words except obvious metadata
     let cleanText = text;
-    const scriptStart = text.indexOf('📈 Palavras faladas:');
-    if (scriptStart > 0) {
-      cleanText = text.substring(scriptStart);
-    }
     
     // Remove [stage directions] and (instructions)
     cleanText = cleanText.replace(/\[.*?\]/g, '');
     cleanText = cleanText.replace(/\(.*?\)/g, '');
     
-    // Remove section headers and markdown
-    const lines = cleanText.split('\n');
-    const spokenLines = [];
+    // Remove emoji lines and metadata
+    cleanText = cleanText.replace(/^[📅🐌🎯🚀📈🎬👤🔍🎙️📊✍️✅❌⚠️🚨].*$/gm, '');
     
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (!trimmed) continue;
-      
-      // Skip obvious stage directions and headers
-      if (trimmed.match(/^(GANCHO|INTRODUÇÃO|DESENVOLVIMENTO|CLÍMAX|CONCLUSÃO|CTA):/)) continue;
-      if (trimmed.match(/^#+/)) continue; // Markdown headers
-      if (trimmed.match(/^📅|^🐌|^🎯|^🚀|^📈|^🎬/)) continue; // Timing info and format headers
-      if (trimmed.match(/^\d+\./)) continue; // Numbered lists
-      if (trimmed.match(/^-\s*\*\*.*\*\*:/)) continue; // Bullet points with bold
-      if (trimmed.match(/^❌|^✅|^⚠️|^🚨/)) continue; // Rule indicators
-      
-      // Extract only Eliseu's speech
-      if (trimmed.startsWith('Eliseu 👤:')) {
-        // Remove the "Eliseu 👤:" prefix and keep only the spoken text
-        const speech = trimmed.replace(/^Eliseu 👤:\s*/, '');
-        if (speech.length > 0) {
-          spokenLines.push(speech);
-        }
-        continue;
-      }
-      
-      // Skip other lines that are not Eliseu's speech
-      if (trimmed.startsWith('[') || trimmed.match(/^(REGRAS|ESTRATÉGIAS|FORMATO)/)) continue;
-      
-      // Legacy format: if it's spoken content without prefixes, keep it
-      if (trimmed.length > 5 && !trimmed.match(/^[A-Z\s]+:/) && !trimmed.startsWith('Eliseu')) {
-        spokenLines.push(trimmed);
-      }
+    // Remove markdown headers
+    cleanText = cleanText.replace(/^#+.*$/gm, '');
+    
+    // Remove section headers
+    cleanText = cleanText.replace(/^(GANCHO|INTRODUÇÃO|DESENVOLVIMENTO|CLÍMAX|CONCLUSÃO|CTA|REGRAS|ESTRATÉGIAS|FORMATO):.*/gm, '');
+    
+    // Remove lines that are clearly not speech
+    cleanText = cleanText.replace(/^---+$/gm, '');
+    cleanText = cleanText.replace(/^\d+\.\s+/gm, ''); // Remove numbered lists
+    cleanText = cleanText.replace(/^[-•]\s+/gm, ''); // Remove bullet points
+    
+    // Count all remaining words
+    const words = cleanText.trim().split(/\s+/).filter(word => word.length > 0);
+    
+    // If we got less than 100 words (seems too short), try a simpler approach
+    if (words.length < 100) {
+      // Fallback: count approximately based on script length
+      // Assume average of 5 characters per word including spaces
+      const estimatedWords = Math.round(text.length / 6);
+      // Cap it to something reasonable (10-20 minutes of speech)
+      return Math.min(Math.max(estimatedWords, 1000), 3000);
     }
     
-    const spokenText = spokenLines.join(' ');
-    return spokenText.split(/\s+/).filter(word => word.length > 0).length;
+    return words.length;
   };
 
   // Helper to format seconds to MM:SS
@@ -180,10 +166,12 @@ function AppContent() {
       }
 
       response = await api.post(endpoint, payload);
-      setVideos(response.data);
+      // Ordenar vídeos por visualizações (maior primeiro)
+      const sortedVideos = response.data.sort((a, b) => b.views - a.views);
+      setVideos(sortedVideos);
       
-      if (response.data.length > 0) {
-        generateScript(response.data);
+      if (sortedVideos.length > 0) {
+        generateScript(sortedVideos);
       }
     } catch (error) {
       const errorMsg = error.response?.data?.detail || 'Erro ao buscar vídeos. Verifique sua conexão e tente novamente.';
@@ -799,6 +787,12 @@ function AppContent() {
                     <Video className="w-5 h-5 text-primary-400" />
                   </div>
                   <h2 className="text-xl font-semibold text-gray-200">Vídeos Encontrados</h2>
+                  {videos.length > 0 && (
+                    <div className="flex items-center gap-1.5 ml-3">
+                      <TrendingUp className="w-4 h-4 text-primary-400" />
+                      <span className="text-xs text-gray-400 font-medium">Ordenados por visualizações</span>
+                    </div>
+                  )}
                 </div>
                 {videos.length > 0 && (
                   <div className="status-success">
@@ -819,9 +813,19 @@ function AppContent() {
                   {videos.map((video, index) => (
                     <div 
                       key={video.id} 
-                      className="card group hover:shadow-lg hover:shadow-primary-500/10 transition-all duration-300 animate-slide-up"
+                      className="card group hover:shadow-lg hover:shadow-primary-500/10 transition-all duration-300 animate-slide-up relative"
                       style={{ animationDelay: `${index * 100}ms` }}
                     >
+                      {/* Ranking Badge */}
+                      <div className={`absolute -top-2 -left-2 w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm z-10 ${
+                        index === 0 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-yellow-900' :
+                        index === 1 ? 'bg-gradient-to-br from-gray-300 to-gray-500 text-gray-900' :
+                        index === 2 ? 'bg-gradient-to-br from-orange-400 to-orange-600 text-orange-900' :
+                        'bg-gradient-to-br from-dark-700 to-dark-800 text-gray-400'
+                      }`}>
+                        #{index + 1}
+                      </div>
+                      
                       <div className="flex gap-4">
                         <div className="relative overflow-hidden rounded-xl">
                           <img
