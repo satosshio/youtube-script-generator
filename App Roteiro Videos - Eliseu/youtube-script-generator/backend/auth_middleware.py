@@ -31,32 +31,32 @@ async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(secur
     """
     try:
         token = credentials.credentials
-        print(f"DEBUG: Token recebido: {token[:50]}...")
+        print(f"DEBUG: [verify_token] Token recebido: {token[:50]}...")
         
         # Verify the JWT token with Supabase
         response = supabase.auth.get_user(token)
-        print(f"DEBUG: Resposta Supabase: user={response.user is not None}")
+        print(f"DEBUG: [verify_token] Resposta Supabase: user={response.user is not None}")
         
         if not response.user:
-            print("DEBUG: Usuário não encontrado na resposta")
+            print("DEBUG: [verify_token] Usuário não encontrado na resposta - RETORNANDO 401")
             raise HTTPException(
                 status_code=401,
                 detail="Invalid authentication credentials",
                 headers={"WWW-Authenticate": "Bearer"},
             )
         
-        print(f"DEBUG: Usuário autenticado: {response.user.email}")
+        print(f"DEBUG: [verify_token] Usuário autenticado: {response.user.email}")
         return {
             "user_id": response.user.id,
             "email": response.user.email,
             "user": response.user
         }
         
-    except HTTPException:
-        print("DEBUG: HTTPException capturada, repassando")
+    except HTTPException as he:
+        print(f"DEBUG: [verify_token] HTTPException capturada: {he.status_code} - {he.detail}")
         raise
     except Exception as e:
-        print(f"DEBUG: Erro na verificação do token: {str(e)}")
+        print(f"DEBUG: [verify_token] Erro na verificação do token: {str(e)} - RETORNANDO 401")
         raise HTTPException(
             status_code=401,
             detail="Could not validate credentials",
@@ -67,6 +67,7 @@ async def get_current_user(user_info: dict = Depends(verify_token)) -> dict:
     """
     Get current authenticated user
     """
+    print(f"DEBUG: [get_current_user] Usuário recebido: {user_info.get('email', 'unknown')}")
     return user_info
 
 async def get_optional_user(
