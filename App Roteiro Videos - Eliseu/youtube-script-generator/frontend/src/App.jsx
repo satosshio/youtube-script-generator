@@ -48,7 +48,7 @@ function AppContent() {
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   
   // New state for AI model selection
-  const [modelProvider, setModelProvider] = useState('openai'); // 'openai' or 'anthropic'
+  const [modelProvider, setModelProvider] = useState('gpt-4.1'); // 'gpt-4.1', 'gpt-5', 'claude-sonnet-4', 'claude-opus-4.1'
 
   const placeholders = [
     "Ex: Jovem e engraçado, com gírias atuais",
@@ -413,7 +413,12 @@ function AppContent() {
                     <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
                     <div className="flex items-center gap-2">
                       <Zap className="w-4 h-4" />
-                      <span>{modelProvider === 'openai' ? 'GPT-4o' : 'Claude 3.5'}</span>
+                      <span>
+                        {modelProvider === 'gpt-4.1' ? 'GPT-4.1' : 
+                         modelProvider === 'gpt-5' ? 'GPT-5' :
+                         modelProvider === 'claude-sonnet-4' ? 'Claude Sonnet 4' :
+                         'Claude Opus 4.1'}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -482,27 +487,27 @@ function AppContent() {
                       <span className="font-semibold text-gray-300">Modelo de IA</span>
                     </div>
                     
-                    <div className="grid grid-cols-1 gap-3">
-                      {/* GPT-4o Option */}
+                    <div className="grid grid-cols-2 gap-3">
+                      {/* GPT-4.1 Option */}
                       <button
-                        onClick={() => setModelProvider('openai')}
+                        onClick={() => setModelProvider('gpt-4.1')}
                         className={`p-4 rounded-xl border-2 text-left transition-all duration-300 ${
-                          modelProvider === 'openai'
+                          modelProvider === 'gpt-4.1'
                             ? 'border-primary-500 bg-primary-500/10 shadow-lg shadow-primary-500/20' 
                             : 'border-dark-700/50 bg-dark-800/30 hover:border-dark-600/60 hover:bg-dark-800/50'
                         }`}
                       >
                         <div className="flex items-start gap-3">
                           <div className="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center flex-shrink-0">
-                            <span className="text-green-400 font-bold text-sm">GPT</span>
+                            <span className="text-green-400 font-bold text-xs">4.1</span>
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-semibold text-gray-200 mb-1">GPT-4o</h3>
+                            <h3 className="font-semibold text-gray-200 mb-1 text-sm">GPT-4.1</h3>
                             <p className="text-xs text-gray-400 leading-relaxed">
-                              Modelo da OpenAI. Rápido e versátil para geração de conteúdo criativo.
+                              Modelo mais recente e poderoso da OpenAI
                             </p>
                           </div>
-                          {modelProvider === 'openai' && (
+                          {modelProvider === 'gpt-4.1' && (
                             <div className="w-5 h-5 rounded-full bg-primary-500 flex items-center justify-center flex-shrink-0">
                               <div className="w-2 h-2 bg-white rounded-full"></div>
                             </div>
@@ -510,26 +515,80 @@ function AppContent() {
                         </div>
                       </button>
 
-                      {/* Claude 3.5 Sonnet Option */}
+                      {/* GPT-5 Option */}
                       <button
-                        onClick={() => setModelProvider('anthropic')}
+                        onClick={() => setModelProvider('gpt-5')}
                         className={`p-4 rounded-xl border-2 text-left transition-all duration-300 ${
-                          modelProvider === 'anthropic'
-                            ? 'border-accent-500 bg-accent-500/10 shadow-lg shadow-accent-500/20' 
+                          modelProvider === 'gpt-5'
+                            ? 'border-purple-500 bg-purple-500/10 shadow-lg shadow-purple-500/20' 
+                            : 'border-dark-700/50 bg-dark-800/30 hover:border-dark-600/60 hover:bg-dark-800/50'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+                            <span className="text-purple-400 font-bold text-xs">5</span>
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-gray-200 mb-1 text-sm">GPT-5</h3>
+                            <p className="text-xs text-gray-400 leading-relaxed">
+                              Próxima geração com capacidades avançadas
+                            </p>
+                          </div>
+                          {modelProvider === 'gpt-5' && (
+                            <div className="w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center flex-shrink-0">
+                              <div className="w-2 h-2 bg-white rounded-full"></div>
+                            </div>
+                          )}
+                        </div>
+                      </button>
+
+                      {/* Claude Sonnet 4 Option */}
+                      <button
+                        onClick={() => setModelProvider('claude-sonnet-4')}
+                        className={`p-4 rounded-xl border-2 text-left transition-all duration-300 ${
+                          modelProvider === 'claude-sonnet-4'
+                            ? 'border-orange-500 bg-orange-500/10 shadow-lg shadow-orange-500/20' 
                             : 'border-dark-700/50 bg-dark-800/30 hover:border-dark-600/60 hover:bg-dark-800/50'
                         }`}
                       >
                         <div className="flex items-start gap-3">
                           <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0">
-                            <span className="text-orange-400 font-bold text-sm">C</span>
+                            <span className="text-orange-400 font-bold text-xs">S4</span>
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-semibold text-gray-200 mb-1">Claude 3.5 Sonnet</h3>
+                            <h3 className="font-semibold text-gray-200 mb-1 text-sm">Claude Sonnet 4</h3>
                             <p className="text-xs text-gray-400 leading-relaxed">
-                              Modelo da Anthropic. Excelente para textos longos e análise profunda.
+                              Modelo equilibrado e eficiente da Anthropic
                             </p>
                           </div>
-                          {modelProvider === 'anthropic' && (
+                          {modelProvider === 'claude-sonnet-4' && (
+                            <div className="w-5 h-5 rounded-full bg-orange-500 flex items-center justify-center flex-shrink-0">
+                              <div className="w-2 h-2 bg-white rounded-full"></div>
+                            </div>
+                          )}
+                        </div>
+                      </button>
+
+                      {/* Claude Opus 4.1 Option */}
+                      <button
+                        onClick={() => setModelProvider('claude-opus-4.1')}
+                        className={`p-4 rounded-xl border-2 text-left transition-all duration-300 ${
+                          modelProvider === 'claude-opus-4.1'
+                            ? 'border-accent-500 bg-accent-500/10 shadow-lg shadow-accent-500/20' 
+                            : 'border-dark-700/50 bg-dark-800/30 hover:border-dark-600/60 hover:bg-dark-800/50'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
+                            <span className="text-cyan-400 font-bold text-xs">O4</span>
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-gray-200 mb-1 text-sm">Claude Opus 4.1</h3>
+                            <p className="text-xs text-gray-400 leading-relaxed">
+                              Modelo mais poderoso da Anthropic
+                            </p>
+                          </div>
+                          {modelProvider === 'claude-opus-4.1' && (
                             <div className="w-5 h-5 rounded-full bg-accent-500 flex items-center justify-center flex-shrink-0">
                               <div className="w-2 h-2 bg-white rounded-full"></div>
                             </div>

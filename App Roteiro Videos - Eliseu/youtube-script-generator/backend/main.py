@@ -60,7 +60,7 @@ class ScriptGenerationRequest(BaseModel):
     videos: List[Dict]
     target_minutes: int = 10
     personality_prompt: str = None
-    model_provider: str = "openai"  # "openai" ou "anthropic"
+    model_provider: str = "gpt-4.1"  # "gpt-4.1", "gpt-5", "claude-sonnet-4", "claude-opus-4.1"
 
 class ScriptResponse(BaseModel):
     script: str

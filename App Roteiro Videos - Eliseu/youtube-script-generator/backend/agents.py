@@ -23,27 +23,35 @@ class ScriptState(TypedDict):
     messages: Annotated[Sequence[BaseMessage], operator.add]
 
 class MultiAgentSystem:
-    def __init__(self, model_provider: str = "openai"):
+    def __init__(self, model_provider: str = "gpt-4.1"):
         self.model_provider = model_provider
         
-        if model_provider == "anthropic":
+        # Anthropic models
+        if model_provider in ["claude-sonnet-4", "claude-opus-4.1"]:
             anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
             print(f"DEBUG: Anthropic API Key encontrada: {'Sim' if anthropic_api_key else 'Não'}")
             if anthropic_api_key:
                 print(f"DEBUG: Claude Key começa com: {anthropic_api_key[:7]}...")
             if not anthropic_api_key:
                 print("Warning: Anthropic API key not found. Using OpenAI as fallback.")
-                model_provider = "openai"
+                model_provider = "gpt-4.1"
+                self.model_provider = model_provider
             else:
+                model_map = {
+                    "claude-sonnet-4": "claude-sonnet-4-20250514",
+                    "claude-opus-4.1": "claude-opus-4-1-20250805"
+                }
+                selected_model = model_map[model_provider]
                 self.llm = ChatAnthropic(
-                    model="claude-3-5-sonnet-20241022",
+                    model=selected_model,
                     temperature=0.7,
                     api_key=anthropic_api_key,
                     max_tokens=4096
                 )
-                print("DEBUG: Using Claude 3.5 Sonnet")
+                print(f"DEBUG: Using {model_provider} ({selected_model})")
         
-        if model_provider == "openai":
+        # OpenAI models
+        if model_provider in ["gpt-4.1", "gpt-5"]:
             openai_api_key = os.getenv("OPENAI_API_KEY")
             print(f"DEBUG: OpenAI API Key encontrada: {'Sim' if openai_api_key else 'Não'}")
             if openai_api_key:
@@ -52,12 +60,18 @@ class MultiAgentSystem:
                 print("Warning: OpenAI API key not found. AI functionality will be limited.")
                 self.llm = None
             else:
+                # Map frontend names to actual model IDs
+                model_map = {
+                    "gpt-4.1": "gpt-4-turbo-preview",  # Using latest GPT-4 turbo as placeholder for GPT-4.1
+                    "gpt-5": "gpt-4-turbo-preview"     # GPT-5 not released yet, using GPT-4 turbo
+                }
+                selected_model = model_map.get(model_provider, "gpt-4-turbo-preview")
                 self.llm = ChatOpenAI(
-                    model="gpt-4o",
+                    model=selected_model,
                     temperature=0.7,
                     api_key=openai_api_key
                 )
-                print("DEBUG: Using GPT-4o")
+                print(f"DEBUG: Using {model_provider} ({selected_model})")
         self.graph = self._build_graph()
         self.progress_callback = None
         self.agent_info = {
