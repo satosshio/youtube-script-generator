@@ -11,6 +11,15 @@ load_dotenv()
 # Initialize Supabase client
 supabase_url = os.getenv("SUPABASE_URL")
 supabase_key = os.getenv("SUPABASE_ANON_KEY")
+
+# Debug Supabase configuration
+print(f"DEBUG: Supabase URL encontrada: {'Sim' if supabase_url else 'Não'}")
+print(f"DEBUG: Supabase Key encontrada: {'Sim' if supabase_key else 'Não'}")
+if supabase_url:
+    print(f"DEBUG: URL: {supabase_url}")
+if supabase_key:
+    print(f"DEBUG: Key últimos 20 chars: {supabase_key[-20:]}")
+
 supabase: Client = create_client(supabase_url, supabase_key)
 
 # Security scheme
