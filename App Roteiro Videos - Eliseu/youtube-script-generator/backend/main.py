@@ -85,6 +85,15 @@ async def test_generate(current_user: dict = Depends(get_current_user)):
     print("DEBUG: [test-generate] Endpoint executado com sucesso!")
     return {"message": "Generate working", "user": current_user.get('email', 'unknown')}
 
+@app.post("/api/test-script-request")
+async def test_script_request(request: ScriptGenerationRequest, current_user: dict = Depends(get_current_user)):
+    """
+    Endpoint de teste com o mesmo modelo do generate-script
+    """
+    print("DEBUG: [test-script-request] Endpoint executado com sucesso!")
+    print(f"DEBUG: Dados recebidos - topic: {request.topic}, videos: {len(request.videos)}")
+    return {"message": "Script request working", "user": current_user.get('email', 'unknown')}
+
 @app.post("/api/search-videos", response_model=List[VideoResponse])
 async def search_videos(request: SearchRequest, current_user: dict = Depends(get_current_user)):
     """
