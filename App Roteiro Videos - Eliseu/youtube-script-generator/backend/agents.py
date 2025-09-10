@@ -23,6 +23,9 @@ class ScriptState(TypedDict):
 class MultiAgentSystem:
     def __init__(self):
         openai_api_key = os.getenv("OPENAI_API_KEY")
+        print(f"DEBUG: OpenAI API Key encontrada: {'Sim' if openai_api_key else 'Não'}")
+        if openai_api_key:
+            print(f"DEBUG: Key começa com: {openai_api_key[:7]}...")
         if not openai_api_key:
             print("Warning: OpenAI API key not found. AI functionality will be limited.")
             self.llm = None
