@@ -73,4 +73,4 @@ npm run dev
 ## APIs Necessárias
 
 - **YouTube Data API v3**: [Console Google Cloud](https://console.cloud.google.com)
-- **OpenAI API**: [OpenAI Platform](https://platform.openai.com)
+- **OpenAI API**: [OpenAI Platform](https://platform.openai.com)# Force redeploy Tue Sep  9 21:14:05 -03 2025
