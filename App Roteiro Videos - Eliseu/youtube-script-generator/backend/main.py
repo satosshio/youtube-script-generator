@@ -18,6 +18,7 @@ app.add_middleware(
         "http://localhost:3000", 
         "http://localhost:5173",
         "https://aa3be56c.youtube-script-generator.pages.dev",
+        "https://scriptai-generator.pages.dev",
         "https://experatoflix.com.br"
     ],
     allow_credentials=True,
