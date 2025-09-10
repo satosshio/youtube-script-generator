@@ -3,8 +3,7 @@ import { Search, Loader2, Video, Eye, ThumbsUp, FileText, Sparkles, Calendar, Cl
 import { AuthProvider, useAuth } from './AuthContext';
 import Auth from './components/Auth';
 import Header from './components/Header';
-import { api, API_URL } from './api';
-import axios from 'axios';
+import { api } from './api';
 
 function AppContent() {
   const { user, loading: authLoading } = useAuth();
@@ -225,7 +224,7 @@ function AppContent() {
       }
       
       // Inicia a requisição do script
-      const scriptPromise = axios.post(`${API_URL}/api/generate-script`, payload);
+      const scriptPromise = api.post('/api/generate-script', payload);
       
       // Simula progresso através dos agentes
       for (const agent of agents) {
