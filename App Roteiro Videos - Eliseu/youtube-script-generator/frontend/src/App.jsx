@@ -46,6 +46,9 @@ function AppContent() {
   const [personalityPrompt, setPersonalityPrompt] = useState('');
   const [showCustomStyleModal, setShowCustomStyleModal] = useState(false);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  
+  // New state for AI model selection
+  const [modelProvider, setModelProvider] = useState('openai'); // 'openai' or 'anthropic'
 
   const placeholders = [
     "Ex: Jovem e engraçado, com gírias atuais",
@@ -203,7 +206,8 @@ function AppContent() {
       const payload = {
         topic: topic,
         videos: videoList,
-        target_minutes: targetMinutes
+        target_minutes: targetMinutes,
+        model_provider: modelProvider
       };
       
       // Add personality prompt only if using custom style
@@ -406,6 +410,11 @@ function AppContent() {
                       <User className="w-4 h-4" />
                       <span>{useEliseuStyle ? 'Estilo Eliseu' : 'Estilo Personalizado'}</span>
                     </div>
+                    <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
+                    <div className="flex items-center gap-2">
+                      <Zap className="w-4 h-4" />
+                      <span>{modelProvider === 'openai' ? 'GPT-4o' : 'Claude 3.5'}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -461,6 +470,72 @@ function AppContent() {
                         <span className={`px-2 py-1 rounded-full ${targetMinutes >= 13 && targetMinutes <= 17 ? 'text-primary-400 bg-primary-500/10' : 'text-gray-500'}`}>15min</span>
                         <span className={`px-2 py-1 rounded-full ${targetMinutes >= 28 ? 'text-primary-400 bg-primary-500/10' : 'text-gray-500'}`}>30min</span>
                       </div>
+                    </div>
+                  </div>
+
+                  {/* AI Model Selection */}
+                  <div className="space-y-4 lg:pl-8 mb-8">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="p-2 rounded-lg bg-primary-500/10">
+                        <Zap className="w-4 h-4 text-primary-400" />
+                      </div>
+                      <span className="font-semibold text-gray-300">Modelo de IA</span>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 gap-3">
+                      {/* GPT-4o Option */}
+                      <button
+                        onClick={() => setModelProvider('openai')}
+                        className={`p-4 rounded-xl border-2 text-left transition-all duration-300 ${
+                          modelProvider === 'openai'
+                            ? 'border-primary-500 bg-primary-500/10 shadow-lg shadow-primary-500/20' 
+                            : 'border-dark-700/50 bg-dark-800/30 hover:border-dark-600/60 hover:bg-dark-800/50'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                            <span className="text-green-400 font-bold text-sm">GPT</span>
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-gray-200 mb-1">GPT-4o</h3>
+                            <p className="text-xs text-gray-400 leading-relaxed">
+                              Modelo da OpenAI. Rápido e versátil para geração de conteúdo criativo.
+                            </p>
+                          </div>
+                          {modelProvider === 'openai' && (
+                            <div className="w-5 h-5 rounded-full bg-primary-500 flex items-center justify-center flex-shrink-0">
+                              <div className="w-2 h-2 bg-white rounded-full"></div>
+                            </div>
+                          )}
+                        </div>
+                      </button>
+
+                      {/* Claude 3.5 Sonnet Option */}
+                      <button
+                        onClick={() => setModelProvider('anthropic')}
+                        className={`p-4 rounded-xl border-2 text-left transition-all duration-300 ${
+                          modelProvider === 'anthropic'
+                            ? 'border-accent-500 bg-accent-500/10 shadow-lg shadow-accent-500/20' 
+                            : 'border-dark-700/50 bg-dark-800/30 hover:border-dark-600/60 hover:bg-dark-800/50'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0">
+                            <span className="text-orange-400 font-bold text-sm">C</span>
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-gray-200 mb-1">Claude 3.5 Sonnet</h3>
+                            <p className="text-xs text-gray-400 leading-relaxed">
+                              Modelo da Anthropic. Excelente para textos longos e análise profunda.
+                            </p>
+                          </div>
+                          {modelProvider === 'anthropic' && (
+                            <div className="w-5 h-5 rounded-full bg-accent-500 flex items-center justify-center flex-shrink-0">
+                              <div className="w-2 h-2 bg-white rounded-full"></div>
+                            </div>
+                          )}
+                        </div>
+                      </button>
                     </div>
                   </div>
 

@@ -60,6 +60,7 @@ class ScriptGenerationRequest(BaseModel):
     videos: List[Dict]
     target_minutes: int = 10
     personality_prompt: str = None
+    model_provider: str = "openai"  # "openai" ou "anthropic"
 
 class ScriptResponse(BaseModel):
     script: str
@@ -125,12 +126,18 @@ async def generate_script(request: ScriptGenerationRequest, current_user: dict =
             print("DEBUG: Erro - nenhum vídeo fornecido")
             raise HTTPException(status_code=400, detail="É necessário fornecer vídeos para gerar o roteiro")
         
-        print("DEBUG: Chamando agent_system.generate_script...")
-        script = await agent_system.generate_script(
+        print(f"DEBUG: Usando modelo: {request.model_provider}")
+        
+        # Criar instância do sistema baseado no provider
+        current_agent_system = MultiAgentSystem(model_provider=request.model_provider)
+        
+        print("DEBUG: Chamando generate_script...")
+        script = await current_agent_system.generate_script(
             videos=request.videos,
             topic=request.topic,
             target_minutes=request.target_minutes,
-            personality_prompt=request.personality_prompt
+            personality_prompt=request.personality_prompt,
+            model_provider=request.model_provider
         )
         
         print("DEBUG: Script gerado com sucesso")
@@ -162,12 +169,16 @@ async def generate_script_with_progress(request: ScriptGenerationRequest, curren
                 {"step": 5, "name": "✅ Revisor", "description": "Finalizando e ajustando tempo...", "percentage": 95}
             ]
             
+            # Criar instância do sistema baseado no provider
+            current_agent_system = MultiAgentSystem(model_provider=request.model_provider)
+            
             # Gera o script em paralelo
-            script_task = asyncio.create_task(agent_system.generate_script(
+            script_task = asyncio.create_task(current_agent_system.generate_script(
                 videos=request.videos,
                 topic=request.topic,
                 target_minutes=request.target_minutes,
-                personality_prompt=request.personality_prompt
+                personality_prompt=request.personality_prompt,
+                model_provider=request.model_provider
             ))
             
             # Simula progresso dos agentes

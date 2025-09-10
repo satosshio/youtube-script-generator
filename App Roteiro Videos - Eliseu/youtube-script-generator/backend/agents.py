@@ -1,6 +1,7 @@
 from typing import Dict, List, TypedDict, Annotated, Sequence
 from langgraph.graph import StateGraph, END
 from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 from langchain.schema import HumanMessage, BaseMessage
 import operator
 import os
@@ -14,6 +15,7 @@ class ScriptState(TypedDict):
     topic: str
     target_minutes: int
     personality_prompt: str
+    model_provider: str
     trends: List[str]
     script_structure: Dict
     raw_script: str
@@ -21,20 +23,41 @@ class ScriptState(TypedDict):
     messages: Annotated[Sequence[BaseMessage], operator.add]
 
 class MultiAgentSystem:
-    def __init__(self):
-        openai_api_key = os.getenv("OPENAI_API_KEY")
-        print(f"DEBUG: OpenAI API Key encontrada: {'Sim' if openai_api_key else 'Não'}")
-        if openai_api_key:
-            print(f"DEBUG: Key começa com: {openai_api_key[:7]}...")
-        if not openai_api_key:
-            print("Warning: OpenAI API key not found. AI functionality will be limited.")
-            self.llm = None
-        else:
-            self.llm = ChatOpenAI(
-                model="gpt-4o-mini",
-                temperature=0.7,
-                api_key=openai_api_key
-            )
+    def __init__(self, model_provider: str = "openai"):
+        self.model_provider = model_provider
+        
+        if model_provider == "anthropic":
+            anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
+            print(f"DEBUG: Anthropic API Key encontrada: {'Sim' if anthropic_api_key else 'Não'}")
+            if anthropic_api_key:
+                print(f"DEBUG: Claude Key começa com: {anthropic_api_key[:7]}...")
+            if not anthropic_api_key:
+                print("Warning: Anthropic API key not found. Using OpenAI as fallback.")
+                model_provider = "openai"
+            else:
+                self.llm = ChatAnthropic(
+                    model="claude-3-5-sonnet-20241022",
+                    temperature=0.7,
+                    api_key=anthropic_api_key,
+                    max_tokens=4096
+                )
+                print("DEBUG: Using Claude 3.5 Sonnet")
+        
+        if model_provider == "openai":
+            openai_api_key = os.getenv("OPENAI_API_KEY")
+            print(f"DEBUG: OpenAI API Key encontrada: {'Sim' if openai_api_key else 'Não'}")
+            if openai_api_key:
+                print(f"DEBUG: OpenAI Key começa com: {openai_api_key[:7]}...")
+            if not openai_api_key:
+                print("Warning: OpenAI API key not found. AI functionality will be limited.")
+                self.llm = None
+            else:
+                self.llm = ChatOpenAI(
+                    model="gpt-4o",
+                    temperature=0.7,
+                    api_key=openai_api_key
+                )
+                print("DEBUG: Using GPT-4o")
         self.graph = self._build_graph()
         self.progress_callback = None
         self.agent_info = {
@@ -672,15 +695,17 @@ class MultiAgentSystem:
             formatted.append(video_info)
         return '\n'.join(formatted)
     
-    async def generate_script(self, videos: List[Dict], topic: str, target_minutes: int = 10, personality_prompt: str = None) -> str:
+    async def generate_script(self, videos: List[Dict], topic: str, target_minutes: int = 10, personality_prompt: str = None, model_provider: str = None) -> str:
         if not self.llm:
-            return "Error: OpenAI API não está disponível. Por favor configure OPENAI_API_KEY."
+            provider_name = model_provider or self.model_provider
+            return f"Error: {provider_name.upper()} API não está disponível. Por favor configure as chaves de API."
         
         initial_state = ScriptState(
             videos=videos,
             topic=topic,
             target_minutes=target_minutes,
             personality_prompt=personality_prompt or "",
+            model_provider=model_provider or self.model_provider,
             trends=[],
             script_structure={},
             raw_script="",
