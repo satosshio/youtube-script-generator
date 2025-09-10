@@ -59,15 +59,26 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true)
       console.log('AuthContext: Tentando login com Supabase...')
+      console.log('AuthContext: Email:', email)
+      console.log('AuthContext: Supabase URL:', supabase.supabaseUrl)
+      console.log('AuthContext: Supabase Key (last 20):', supabase.supabaseKey?.slice(-20))
       
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
       
-      console.log('AuthContext: Resposta do Supabase:', { data, error })
+      console.log('AuthContext: Resposta completa do Supabase:', JSON.stringify({ data, error }, null, 2))
       
-      if (error) throw error
+      if (error) {
+        console.error('AuthContext: Erro detalhado:', {
+          message: error.message,
+          status: error.status,
+          statusCode: error.statusCode,
+          details: error
+        })
+        throw error
+      }
       
       console.log('AuthContext: Login bem-sucedido, usuário:', data.user)
       console.log('AuthContext: Session:', data.session)
@@ -81,6 +92,7 @@ export const AuthProvider = ({ children }) => {
       return { data, error: null }
     } catch (error) {
       console.error('AuthContext: Erro no login:', error)
+      console.error('AuthContext: Stack trace:', error.stack)
       return { data: null, error }
     } finally {
       setLoading(false)

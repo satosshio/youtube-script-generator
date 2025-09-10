@@ -10,3 +10,34 @@ console.log('Using environment key?', !!import.meta.env.VITE_SUPABASE_ANON_KEY)
 console.log('Key last 20 chars:', supabaseAnonKey.slice(-20))
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+// Test Supabase connection
+const testSupabaseConnection = async () => {
+  try {
+    console.log('=== TESTE DE CONEXÃO SUPABASE ===')
+    const { data, error } = await supabase.auth.getSession()
+    console.log('Teste getSession:', { data, error })
+    
+    // Test direct API call
+    const response = await fetch(`${supabaseUrl}/auth/v1/settings`, {
+      headers: {
+        'apikey': supabaseAnonKey,
+        'Authorization': `Bearer ${supabaseAnonKey}`
+      }
+    })
+    
+    if (response.ok) {
+      const settings = await response.json()
+      console.log('Settings API response:', settings)
+    } else {
+      console.error('Settings API error:', response.status, response.statusText)
+      const errorText = await response.text()
+      console.error('Error body:', errorText)
+    }
+  } catch (err) {
+    console.error('Erro no teste de conexão:', err)
+  }
+}
+
+// Run test after a small delay
+setTimeout(testSupabaseConnection, 1000)
