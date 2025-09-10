@@ -77,6 +77,14 @@ async def test_auth(current_user: dict = Depends(get_current_user)):
     print("DEBUG: [test-auth] Endpoint executado com sucesso!")
     return {"message": "Auth working", "user": current_user.get('email', 'unknown')}
 
+@app.post("/api/test-generate")
+async def test_generate(current_user: dict = Depends(get_current_user)):
+    """
+    Endpoint de teste simplificado para geração de script
+    """
+    print("DEBUG: [test-generate] Endpoint executado com sucesso!")
+    return {"message": "Generate working", "user": current_user.get('email', 'unknown')}
+
 @app.post("/api/search-videos", response_model=List[VideoResponse])
 async def search_videos(request: SearchRequest, current_user: dict = Depends(get_current_user)):
     """
