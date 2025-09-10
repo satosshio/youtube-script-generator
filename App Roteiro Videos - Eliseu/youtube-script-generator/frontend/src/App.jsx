@@ -166,8 +166,8 @@ function AppContent() {
       }
 
       response = await api.post(endpoint, payload);
-      // Ordenar vídeos por visualizações (maior primeiro)
-      const sortedVideos = response.data.sort((a, b) => b.views - a.views);
+      // Ordenar vídeos por visualizações (maior primeiro) com fallback para 0
+      const sortedVideos = response.data.sort((a, b) => (b.views || 0) - (a.views || 0));
       setVideos(sortedVideos);
       
       if (sortedVideos.length > 0) {
@@ -848,11 +848,11 @@ function AppContent() {
                           <div className="flex items-center gap-4">
                             <div className="flex items-center gap-1.5 bg-dark-800/50 rounded-lg px-2 py-1">
                               <Eye className="w-3 h-3 text-gray-400" />
-                              <span className="text-xs text-gray-300 font-medium">{formatNumber(video.views)}</span>
+                              <span className="text-xs text-gray-300 font-medium">{formatNumber(video.views || 0)}</span>
                             </div>
                             <div className="flex items-center gap-1.5 bg-dark-800/50 rounded-lg px-2 py-1">
                               <ThumbsUp className="w-3 h-3 text-gray-400" />
-                              <span className="text-xs text-gray-300 font-medium">{formatNumber(video.likes)}</span>
+                              <span className="text-xs text-gray-300 font-medium">{formatNumber(video.likes || 0)}</span>
                             </div>
                           </div>
                         </div>
